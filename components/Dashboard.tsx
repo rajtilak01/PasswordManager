@@ -67,14 +67,14 @@ export default function DashboardPage() {
           <SheetComponent />
         </div>
 
-        <Card className="mb-6">
+        <Card className="mb-6 ">
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
             <CardDescription>
               Manage your passwords and secure notes.
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex gap-4">
+          <CardContent className="flex gap-4 flex-col md:flex-row">
             <Button variant="outline" onClick={handleGeneratePasswordClick}>
               Generate Password
             </Button>

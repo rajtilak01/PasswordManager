@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,101 +13,107 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Plus } from "lucide-react";
-import { useState } from "react";
+import { Plus, XIcon } from "lucide-react";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 export function SheetComponent() {
+  const [website, setWebsite] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false); // Controlled Sheet state
+
   function initialState() {
     setPassword("");
     setUsername("");
     setWebsite("");
   }
 
-  const [website, setWebsite] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
-
   const handleSave = () => {
     if (!website || !username || !password) {
       setIsAlertDialogOpen(true);
-      initialState();
       return;
     }
     initialState();
+    setIsSheetOpen(false); // Close sheet only on successful save
   };
 
-  //todo when clicking on other side sheet gets trigger off still having some values, need to manage too
   return (
     <>
-      <Sheet>
+      <Sheet open={isSheetOpen}>
         <SheetTrigger asChild>
-          <Button variant="outline">
+          <Button onClick={() => setIsSheetOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> Add New
           </Button>
         </SheetTrigger>
-        <SheetContent>
+        <SheetContent
+          className="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 h-full" // Full width on mobile
+        >
           <SheetHeader>
-            <SheetTitle>Put your password here</SheetTitle>
+            <div className="flex justify-between items-center">
+              <SheetTitle className="text-xl">Put your password here</SheetTitle>
+              <Button onClick={() => setIsSheetOpen(false)}>
+                <XIcon className="size-4" />
+              </Button>
+            </div>
             <SheetDescription>Click save when you're done.</SheetDescription>
           </SheetHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="text-right">
-                Website
-              </Label>
+
+          <div className="grid gap-4 py-4 px-4 flex flex-col">
+            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="md:text-right">Website</Label>
               <Input
-                required={true}
+                required
                 placeholder="website"
                 id="name"
                 value={website}
-                className="col-span-3"
+                className="md:col-span-3"
                 onChange={(e) => setWebsite(e.target.value)}
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="text-right">
-                Username
-              </Label>
+            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="username" className="md:text-right">Username</Label>
               <Input
-                required={true}
+                required
                 placeholder="username"
                 id="username"
                 value={username}
-                className="col-span-3"
+                className="md:col-span-3"
                 onChange={(e) => setUsername(e.target.value)}
               />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="password" className="text-right">
-                Password
-              </Label>
+            <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
+              <Label htmlFor="password" className="md:text-right">Password</Label>
               <Input
-                required={true}
+                required
                 placeholder="password"
                 id="password"
                 value={password}
-                className="col-span-3"
+                className="md:col-span-3"
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </div>
-          <SheetFooter>
+
+          <SheetFooter className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+            <Button type="submit" onClick={handleSave}>
+              Save changes
+            </Button>
             <SheetClose asChild>
-              <Button type="submit" onClick={handleSave}>
-                Save changes
+              <Button
+                variant="destructive"
+                onClick={() => setIsSheetOpen(false)}
+              >
+                Cancel
               </Button>
             </SheetClose>
           </SheetFooter>
