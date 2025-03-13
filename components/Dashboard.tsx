@@ -18,8 +18,10 @@ import {
 } from "@/components/ui/table";
 import { Shield, Plus, Search } from "lucide-react";
 import { SheetComponent } from "./SheetComponent";
+import { useAuth } from "@/app/context/AuthContext";
 
 export default function DashboardPage() {
+  const { logout } = useAuth();
   const handleAddNewClick = () => {
     // Handle Add New button click
     console.log("Add New button clicked");
@@ -40,6 +42,10 @@ export default function DashboardPage() {
     console.log("Import Passwords button clicked");
   };
 
+  async function userLogout () {
+    await logout();
+  }
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="border-b">
@@ -52,7 +58,7 @@ export default function DashboardPage() {
             <Button variant="ghost">Passwords</Button>
             <Button variant="ghost">Notes</Button>
             <Button variant="ghost">Settings</Button>
-            <Button variant="outline">Log Out</Button>
+            <Button variant="outline" onClick={userLogout}>Log Out</Button>
           </nav>
         </div>
       </header>

@@ -11,6 +11,7 @@ import {
   User,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import { redirect } from 'next/navigation';
 
 interface AuthContextType {
   user: User | null;
@@ -70,6 +71,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = async () => {
     try {
       await signOut(auth);
+      return redirect('/')
     } catch (error) {
       console.error('Error logging out:', error);
       throw error;
