@@ -1,10 +1,45 @@
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Shield, Plus, Search } from "lucide-react"
+"use client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Shield, Plus, Search } from "lucide-react";
+import { SheetComponent } from "./SheetComponent";
 
 export default function DashboardPage() {
+  const handleAddNewClick = () => {
+    // Handle Add New button click
+    console.log("Add New button clicked");
+  };
+
+  const handleGeneratePasswordClick = () => {
+    // Handle Generate Password button click
+    console.log("Generate Password button clicked");
+  };
+
+  const handlePasswordHealthCheckClick = () => {
+    // Handle Password Health Check button click
+    console.log("Password Health Check button clicked");
+  };
+
+  const handleImportPasswordsClick = () => {
+    // Handle Import Passwords button click
+    console.log("Import Passwords button clicked");
+  };
+
   return (
     <div className="flex flex-col min-h-screen">
       <header className="border-b">
@@ -25,20 +60,30 @@ export default function DashboardPage() {
       <main className="flex-1 container py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Your Vault</h1>
-          <Button>
+          {/* <Button onClick={handleAddNewClick}>
             <Plus className="mr-2 h-4 w-4" /> Add New
-          </Button>
+          </Button> */}
+
+          <SheetComponent />
         </div>
 
         <Card className="mb-6">
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>Manage your passwords and secure notes.</CardDescription>
+            <CardDescription>
+              Manage your passwords and secure notes.
+            </CardDescription>
           </CardHeader>
           <CardContent className="flex gap-4">
-            <Button variant="outline">Generate Password</Button>
-            <Button variant="outline">Password Health Check</Button>
-            <Button variant="outline">Import Passwords</Button>
+            <Button variant="outline" onClick={handleGeneratePasswordClick}>
+              Generate Password
+            </Button>
+            <Button variant="outline" onClick={handlePasswordHealthCheckClick}>
+              Password Health Check
+            </Button>
+            <Button variant="outline" onClick={handleImportPasswordsClick}>
+              Import Passwords
+            </Button>
           </CardContent>
         </Card>
 
@@ -81,6 +126,5 @@ export default function DashboardPage() {
         </Table>
       </main>
     </div>
-  )
+  );
 }
-
