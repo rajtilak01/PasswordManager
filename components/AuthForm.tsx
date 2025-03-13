@@ -35,7 +35,7 @@ export default function AuthForm({ type }: { type: "signin" | "signup" }) {
       // console.log("token from firebase", token);
       localStorage.setItem("token", token);
       setCookie(token);
-      router.push("/dashboard");
+      router.push("/passwords");
     } catch (error: any) {
       setError(error.message);
     }
@@ -49,7 +49,7 @@ export default function AuthForm({ type }: { type: "signin" | "signup" }) {
       localStorage.setItem("token", token);
       setCookie(token);
       // console.log("result after google login", user);
-      router.push("/dashboard");
+      router.push("/passwords");
     } catch (error: any) {
       setError(error.message);
     }
