@@ -14,23 +14,17 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Plus, XIcon } from "lucide-react";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { savePassword } from "@/server/users.actions";
+import { AlertDialogComponent} from "./AlertDialogComponent";
 
 export function SheetComponent() {
-  const [website, setWebsite] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState(false);
-  const [isSheetOpen, setIsSheetOpen] = useState(false); // Controlled Sheet state
+  const [website, setWebsite] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState<boolean>(false);
+  const [isSheetOpen, setIsSheetOpen] = useState<boolean>(false); // Controlled Sheet state
+  const [serverError, setServerError] = useState<boolean>(false);
+  const [success, setSuccess] = useState<boolean>(false);
 
   function initialState() {
     setPassword("");
@@ -43,26 +37,33 @@ export function SheetComponent() {
       setIsAlertDialogOpen(true);
       return;
     }
+
     const data = {
       website,
       username,
       password,
       userId: "random string at this moment",
     };
-    console.log("control is reaching here before server call");
+
     const response = await savePassword(data);
 
-    console.log("response after saving the data", response);
-
     if (response?.success) {
-      initialState();
-      setIsSheetOpen(false); // Close sheet only on successful save
+      initialState(); 
+      setIsAlertDialogOpen(true);
+      setIsSheetOpen(false);
+      setSuccess(true);
+    } else {
+      setServerError(true); 
+      setIsAlertDialogOpen(true);
     }
-    // const response = await savePassword(data);
-    console.log("response after saving the data");
-    initialState();
-    setIsSheetOpen(false); // Close sheet only on successful save
-  };
+
+    setTimeout(() => {
+      setSuccess(false);
+      setServerError(false);
+      initialState();
+    }, 3000);
+};
+
 
   return (
     <>
@@ -72,9 +73,7 @@ export function SheetComponent() {
             <Plus className="mr-2 h-4 w-4" /> Add New
           </Button>
         </SheetTrigger>
-        <SheetContent
-          className="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 h-full" // Full width on mobile
-        >
+        <SheetContent className="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 h-full">
           <SheetHeader>
             <div className="flex justify-between items-center">
               <SheetTitle className="text-xl">
@@ -146,21 +145,12 @@ export function SheetComponent() {
         </SheetContent>
       </Sheet>
 
-      <AlertDialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>All fields are required</AlertDialogTitle>
-            <AlertDialogDescription>
-              Please fill in all the fields before saving.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setIsAlertDialogOpen(false)}>
-              OK
-            </AlertDialogCancel>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <AlertDialogComponent
+        isAlertDialogOpen={isAlertDialogOpen}
+        setIsAlertDialogOpen={setIsAlertDialogOpen}
+        serverError={serverError}
+        success={success}
+      />
     </>
   );
 }

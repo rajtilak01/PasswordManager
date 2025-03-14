@@ -9,27 +9,34 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Button } from "@/components/ui/button"
 
-export function AlertDialogDemo() {
+export function AlertDialogComponent({
+  isAlertDialogOpen, setIsAlertDialogOpen, serverError, success
+}: {
+  isAlertDialogOpen: boolean;
+  setIsAlertDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  serverError: boolean;
+  success: boolean
+}) {
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant="outline">Show Dialog</Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction>Continue</AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <AlertDialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {serverError
+                ? "Server Error occured" : success ? "Congratulations"
+                : "All fields are required"}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+             {serverError ? "Please try after sometime": success ? "Password saved successfully" : "Please fill in all the fields before saving."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setIsAlertDialogOpen(false)}>
+              OK
+            </AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
   )
 }
