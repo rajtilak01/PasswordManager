@@ -23,6 +23,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { savePassword } from "@/server/users.actions";
 
 export function SheetComponent() {
   const [website, setWebsite] = useState("");
@@ -37,11 +38,28 @@ export function SheetComponent() {
     setWebsite("");
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!website || !username || !password) {
       setIsAlertDialogOpen(true);
       return;
     }
+    const data = {
+      website,
+      username,
+      password,
+      userId: "random string at this moment",
+    };
+    console.log("control is reaching here before server call");
+    const response = await savePassword(data);
+
+    console.log("response after saving the data", response);
+
+    if (response?.success) {
+      initialState();
+      setIsSheetOpen(false); // Close sheet only on successful save
+    }
+    // const response = await savePassword(data);
+    console.log("response after saving the data");
     initialState();
     setIsSheetOpen(false); // Close sheet only on successful save
   };
@@ -59,7 +77,9 @@ export function SheetComponent() {
         >
           <SheetHeader>
             <div className="flex justify-between items-center">
-              <SheetTitle className="text-xl">Put your password here</SheetTitle>
+              <SheetTitle className="text-xl">
+                Put your password here
+              </SheetTitle>
               <Button onClick={() => setIsSheetOpen(false)}>
                 <XIcon className="size-4" />
               </Button>
@@ -69,7 +89,9 @@ export function SheetComponent() {
 
           <div className="grid gap-4 py-4 px-4 flex flex-col">
             <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
-              <Label htmlFor="name" className="md:text-right">Website</Label>
+              <Label htmlFor="name" className="md:text-right">
+                Website
+              </Label>
               <Input
                 required
                 placeholder="website"
@@ -80,7 +102,9 @@ export function SheetComponent() {
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
-              <Label htmlFor="username" className="md:text-right">Username</Label>
+              <Label htmlFor="username" className="md:text-right">
+                Username
+              </Label>
               <Input
                 required
                 placeholder="username"
@@ -91,7 +115,9 @@ export function SheetComponent() {
               />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-4 items-center gap-4">
-              <Label htmlFor="password" className="md:text-right">Password</Label>
+              <Label htmlFor="password" className="md:text-right">
+                Password
+              </Label>
               <Input
                 required
                 placeholder="password"
