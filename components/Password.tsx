@@ -19,8 +19,14 @@ import {
 import { Search } from "lucide-react";
 import { SheetComponent } from "./SheetComponent";
 import Navbar from "./Navbar";
+import axios from "axios";
+import { useAuth } from "@/app/context/AuthContext";
+import { redirect } from "next/navigation";
+import { useEffect, useState } from "react";
+import { dateConverter } from "@/lib/utils";
 
 export default function PasswordPage() {
+  const { user } = useAuth();
   const handleAddNewClick = () => {
     // Handle Add New button click
     console.log("Add New button clicked");
@@ -41,16 +47,33 @@ export default function PasswordPage() {
     console.log("Import Passwords button clicked");
   };
 
+  const [passwords, setPasswords] = useState([]);
+
+  if (!user) return redirect("/login");
+
+  const userId = user.uid;
+
+  useEffect(() => {
+    const fetchPasswords = async () => {
+      try {
+        const response = await axios.get(
+          `/api/get-passwords?userId=${userId}`
+        );
+        setPasswords(response.data?.data || []);
+      } catch (error) {
+        console.error("Error fetching passwords:", error);
+        setPasswords([]); // Ensure the state is an array even on error
+      }
+    };
+
+    fetchPasswords();
+  }, [userId]);
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
       <main className="flex-1 container py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold">Your Vault</h1>
-          {/* <Button onClick={handleAddNewClick}>
-            <Plus className="mr-2 h-4 w-4" /> Add New
-          </Button> */}
-
           <SheetComponent />
         </div>
 
@@ -91,11 +114,11 @@ export default function PasswordPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {[1, 2, 3].map((item) => (
-              <TableRow key={item}>
-                <TableCell>example.com</TableCell>
-                <TableCell>user@example.com</TableCell>
-                <TableCell>2023-06-01</TableCell>
+            {passwords && passwords.map((password: any) => (
+              <TableRow key={password.id}>
+                <TableCell>{password.website}</TableCell>
+                <TableCell>{password.username}</TableCell>
+                <TableCell>{dateConverter(password.updatedAt).date}</TableCell>
                 <TableCell>
                   <Button variant="ghost" size="sm">
                     View

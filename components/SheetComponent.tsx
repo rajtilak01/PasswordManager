@@ -15,7 +15,9 @@ import {
 } from "@/components/ui/sheet";
 import { Plus, XIcon } from "lucide-react";
 import { savePassword } from "@/server/users.actions";
-import { AlertDialogComponent} from "./AlertDialogComponent";
+import { AlertDialogComponent } from "./AlertDialogComponent";
+import { useAuth } from "@/app/context/AuthContext";
+import { redirect } from "next/navigation";
 
 export function SheetComponent() {
   const [website, setWebsite] = useState<string>("");
@@ -26,6 +28,12 @@ export function SheetComponent() {
   const [serverError, setServerError] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
 
+  const { user } = useAuth();
+
+  if(!user) {
+    return redirect("/login");
+  }
+  
   function initialState() {
     setPassword("");
     setUsername("");
@@ -42,18 +50,18 @@ export function SheetComponent() {
       website,
       username,
       password,
-      userId: "random string at this moment",
+      userId: user.uid,
     };
 
     const response = await savePassword(data);
 
     if (response?.success) {
-      initialState(); 
+      initialState();
       setIsAlertDialogOpen(true);
       setIsSheetOpen(false);
       setSuccess(true);
     } else {
-      setServerError(true); 
+      setServerError(true);
       setIsAlertDialogOpen(true);
     }
 
@@ -62,8 +70,7 @@ export function SheetComponent() {
       setServerError(false);
       initialState();
     }, 3000);
-};
-
+  };
 
   return (
     <>
