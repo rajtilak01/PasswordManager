@@ -16,7 +16,7 @@ export default function Security(){
                         </p>
                         <ul className="space-y-4">
                           <SecurityFeature title="Zero-Knowledge Architecture">
-                            We can't see your passwords. Your data is encrypted and decrypted locally on your device.
+                            We can&apos;t see your passwords. Your data is encrypted and decrypted locally on your device.
                           </SecurityFeature>
                           <SecurityFeature title="Two-Factor Authentication">
                             Add an extra layer of security to your account with 2FA using authenticator apps or security keys.

@@ -33,7 +33,7 @@ export function SheetComponent() {
   if(!user) {
     return redirect("/login");
   }
-  
+
   function initialState() {
     setPassword("");
     setUsername("");
@@ -90,7 +90,7 @@ export function SheetComponent() {
                 <XIcon className="size-4" />
               </Button>
             </div>
-            <SheetDescription>Click save when you're done.</SheetDescription>
+            <SheetDescription>Click save when you&apos;re done.</SheetDescription>
           </SheetHeader>
 
           <div className="grid gap-4 py-4 px-4 flex flex-col">
