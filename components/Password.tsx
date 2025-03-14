@@ -24,8 +24,15 @@ import { useAuth } from "@/app/context/AuthContext";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { dateConverter } from "@/lib/utils";
+import { generateRandomPassword } from "@/lib/passwordGenerator";
+import { AlertDialog } from "@radix-ui/react-alert-dialog";
+import { AlertDialogComponent } from "./AlertDialogComponent";
 
 export default function PasswordPage() {
+
+  const [isAlertDialogOpen, setIsAlertDialogOpen] = useState<boolean>(false);
+  const [generatedPassword, setGeneratedPassword] = useState<string>("");
+
   const { user } = useAuth();
   const handleAddNewClick = () => {
     // Handle Add New button click
@@ -33,8 +40,10 @@ export default function PasswordPage() {
   };
 
   const handleGeneratePasswordClick = () => {
-    // Handle Generate Password button click
-    console.log("Generate Password button clicked");
+    const randomPassword = generateRandomPassword();
+    setIsAlertDialogOpen(true);
+    setGeneratedPassword(randomPassword);
+    console.log("Generate Password button clicked", randomPassword);
   };
 
   const handlePasswordHealthCheckClick = () => {
@@ -135,6 +144,12 @@ export default function PasswordPage() {
           </TableBody>
         </Table>
       </main>
+       <AlertDialogComponent
+              isAlertDialogOpen={isAlertDialogOpen}
+              setIsAlertDialogOpen={setIsAlertDialogOpen}
+              isPassword={true}
+              password={generatedPassword}
+            />
     </div>
   );
 }
