@@ -30,7 +30,7 @@ export function SheetComponent() {
 
   const { user } = useAuth();
 
-  if(!user) {
+  if (!user) {
     return redirect("/login");
   }
 
@@ -45,6 +45,7 @@ export function SheetComponent() {
       setIsAlertDialogOpen(true);
       return;
     }
+    console.log("control is not reaching here is it??");
 
     const data = {
       website,
@@ -54,22 +55,24 @@ export function SheetComponent() {
     };
 
     const response = await savePassword(data);
+    console.log("response coming from backend", response);
+    console.log("response coming from backend", response?.success);
 
     if (response?.success) {
       initialState();
-      setIsAlertDialogOpen(true);
-      setIsSheetOpen(false);
       setSuccess(true);
+      setIsSheetOpen(false);
     } else {
       setServerError(true);
-      setIsAlertDialogOpen(true);
     }
 
-    setTimeout(() => {
-      setSuccess(false);
-      setServerError(false);
-      initialState();
-    }, 3000);
+    setIsAlertDialogOpen(true);
+  };
+
+  const handleAlertDialogClose = () => {
+    setSuccess(false);
+    setServerError(false);
+    setIsAlertDialogOpen(false);
   };
 
   return (
@@ -83,9 +86,7 @@ export function SheetComponent() {
         <SheetContent className="w-full sm:w-3/4 md:w-1/2 lg:w-1/3 xl:w-1/4 h-full">
           <SheetHeader>
             <div className="flex justify-between items-center">
-              <SheetTitle className="text-xl">
-                Put your password here
-              </SheetTitle>
+              <SheetTitle className="text-xl">Put your password here</SheetTitle>
               <Button onClick={() => setIsSheetOpen(false)}>
                 <XIcon className="size-4" />
               </Button>
@@ -141,10 +142,7 @@ export function SheetComponent() {
               Save changes
             </Button>
             <SheetClose asChild>
-              <Button
-                variant="destructive"
-                onClick={() => setIsSheetOpen(false)}
-              >
+              <Button variant="destructive" onClick={() => setIsSheetOpen(false)}>
                 Cancel
               </Button>
             </SheetClose>
@@ -154,7 +152,7 @@ export function SheetComponent() {
 
       <AlertDialogComponent
         isAlertDialogOpen={isAlertDialogOpen}
-        setIsAlertDialogOpen={setIsAlertDialogOpen}
+        setIsAlertDialogOpen={handleAlertDialogClose}
         serverError={serverError}
         success={success}
       />

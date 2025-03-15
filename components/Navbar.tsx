@@ -43,6 +43,7 @@ export default function Navbar() {
       <div className="container flex items-center justify-between h-16">
         {branding}
         <nav className="flex items-center gap-4">
+        <ThemeToggle />
           <Button variant="ghost" onClick={() => router.push('/dashboard')}>Settings</Button>
           <Button variant="outline" onClick={logout}>Log Out</Button>
         </nav>

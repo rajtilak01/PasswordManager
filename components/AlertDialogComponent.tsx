@@ -17,6 +17,8 @@ export function AlertDialogComponent({
   success = false,
   isPassword = false,
   password = "",
+  setSuccess,
+  setServerError
 }: {
   isAlertDialogOpen: boolean;
   setIsAlertDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +26,8 @@ export function AlertDialogComponent({
   success?: boolean;
   isPassword?: boolean;
   password?: string;
+  setSuccess?: React.Dispatch<React.SetStateAction<boolean>>;
+  setServerError?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
     <AlertDialog open={isAlertDialogOpen} onOpenChange={setIsAlertDialogOpen}>
