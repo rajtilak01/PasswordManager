@@ -1,6 +1,6 @@
 "use server";
 import { NextRequest, NextResponse } from "next/server";
-import Password from "@/modes/Password";
+import Password from "@/models/Password";
 import { encrypt } from "@/lib/encryption";
 import { connectDB } from "@/lib/db";
 
@@ -35,4 +35,13 @@ export async function savePassword(data: passwordObject) {
       updatedAt: passwordSave.updatedAt,
     },
   };
+}
+
+
+export async function deleteAccount(userId: string) {
+    await connectDB();  
+
+    const deleteResult = await Password.deleteMany({ userId });
+
+    return { success: true };
 }

@@ -1,5 +1,5 @@
 import { connectDB } from "@/lib/db";
-import Password from "@/modes/Password";
+import Password from "@/models/Password";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {

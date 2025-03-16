@@ -45,7 +45,7 @@ export function SheetComponent() {
       setIsAlertDialogOpen(true);
       return;
     }
-    console.log("control is not reaching here is it??");
+    // console.log("control is not reaching here is it??");
 
     const data = {
       website,
@@ -55,8 +55,8 @@ export function SheetComponent() {
     };
 
     const response = await savePassword(data);
-    console.log("response coming from backend", response);
-    console.log("response coming from backend", response?.success);
+    // console.log("response coming from backend", response);
+    // console.log("response coming from backend", response?.success);
 
     if (response?.success) {
       initialState();
