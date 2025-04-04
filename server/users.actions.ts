@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Password from "@/models/Password";
 import { encrypt } from "@/lib/encryption";
 import { connectDB } from "@/lib/db";
+import { auth } from "@/lib/firebaseAdmin";
 
 type passwordObject = {
   website: string;
@@ -43,5 +44,13 @@ export async function deleteAccount(userId: string) {
 
     const deleteResult = await Password.deleteMany({ userId });
 
-    return { success: true };
+    try {
+      await auth.deleteUser(userId);
+      console.log(`User with ID ${userId} deleted successfully.`);
+  } catch (error: any) {
+      console.error(`Error deleting Firebase user: ${error.message}`);
+      // throw new Error("Failed to delete Firebase user.");
+  }
+
+  return { success: true };
 }

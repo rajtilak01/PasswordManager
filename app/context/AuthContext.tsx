@@ -9,6 +9,7 @@ import {
   signOut,
   onAuthStateChanged,
   User,
+  sendPasswordResetEmail,
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { redirect } from 'next/navigation';
@@ -20,6 +21,7 @@ interface AuthContextType {
   loginWithEmailAndPassword: (email: string, password: string) => Promise<User | void>;
   signUpWithEmailAndPassword: (email: string, password: string) => Promise<User |void>;
   logout: () => Promise<void>;
+  sendPasswordResetEmailHandler: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -78,6 +80,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const sendPasswordResetEmailHandler = async (email: string) => {
+    // console.log("function called here so let's see the result");
+    // console.log("email of the user is this", email);
+    try { 
+      await sendPasswordResetEmail(auth, email);
+    }
+    catch (error) { 
+      console.error('Error sending password reset email:', error);
+      throw error;
+    }
+  };
+
   const value = {
     user,
     loading,
@@ -85,6 +99,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     loginWithEmailAndPassword,
     signUpWithEmailAndPassword,
     logout,
+    sendPasswordResetEmailHandler,
   };
 
   return (
